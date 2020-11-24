@@ -1,0 +1,6 @@
+C:\Users\Awais\source\repos\MyRestaurantMySQLAPI\obj\Debug\MyRestaurantMySQLAPI.njsproj.CoreCompileInputs.cache
+C:\Users\Awais\source\repos\MyRestaurantMySQLAPI\bin\Microsoft.NodejsTools.WebRole.dll
+C:\Users\Awais\source\repos\MyRestaurantMySQLAPI\obj\Debug\MyRestaurantMySQLAPI.njsprojAssemblyReference.cache
+K:\MyRestaurantMySQLAPI\obj\Debug\MyRestaurantMySQLAPI.njsprojAssemblyReference.cache
+K:\MyRestaurantMySQLAPI\obj\Debug\MyRestaurantMySQLAPI.njsproj.CoreCompileInputs.cache
+K:\MyRestaurantMySQLAPI\bin\Microsoft.NodejsTools.WebRole.dll
