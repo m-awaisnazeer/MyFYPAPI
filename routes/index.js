@@ -11,6 +11,74 @@ router.get('/', function (req, res, next) {
 })
 
 //======================================
+//Token TABLE
+//GET /POST
+//======================================
+
+router.get('/token', function (req, res, next) {
+    if (req.query.key == API_KEY) {
+        var fbid = req.query.fbid
+
+        if (fbid != null) {
+            req.getConnection(function (error, conn) {
+                conn.query('SELECT fbid,token FROM token WHERE fbid=?', [fbid], function (err, rows, fields) {
+                    if (err) {
+                        res.status(500)
+                        res.send(JSON.stringify({ success: false, message: err.message }))
+                    }
+                    else {
+                        if (rows.length > 0) {
+                            res.send(JSON.stringify({ success: true, result: rows }))
+
+                        } else {
+                            res.send(JSON.stringify({ success: false, message: "_EMPTY" }))
+                        }
+                    }
+                })
+            })
+        }
+        else {
+            res.send(JSON.stringify({ success: false, message: "Missing fbid in query" }))
+        }
+    }
+    else {
+        res.send(JSON.stringify({ success: false, message:"Wrong API Key" }))
+    }
+})
+
+router.post('/token', function (req, res, next) {
+    if (req.body.key == API_KEY) {
+
+        var fbid = req.body.fbid
+        var token = req.body.token
+        
+
+        if (fbid != null) {
+            req.getConnection(function (error, conn) {
+                conn.query('INSERT INTO token(FBID,Token) VALUES(?,?) ON DUPLICATE KEY UPDATE Token=?', [fbid,token,token], function (err, rows, fields) {
+                    if (err) {
+                        res.status(500)
+                        res.send(JSON.stringify({ success: false, message: err.message }))
+                    }
+                    else {
+                        if (rows.affectedRows > 0) {
+                            res.send(JSON.stringify({ success: true, message:"Success" }))
+
+                        }
+                    }
+                })
+            })
+        }
+        else {
+            res.send(JSON.stringify({ success: false, message: "Missing fbid in body" }))
+        }
+    }
+    else {
+        res.send(JSON.stringify({ success: false, message: "Wrong API Key" }))
+    }
+})
+
+//======================================
 //RESTAURANTOWNER TABLE
 //GET /POST
 //======================================
@@ -817,6 +885,45 @@ router.post('/createOrder', function (req, res, next) {
     }
 })
 
+router.put('/updateOrder', function (req, res, next) {
+    if (req.body.key == API_KEY) {
+
+        var order_id = parseInt(req.body.orderId);
+        var order_status = parseInt(req.body.orderStatus);
+
+       
+        if (order_id != null && order_status != null) {
+
+            if(Number.isInteger(order_id) && Number.isInteger(order_status))
+            {
+                req.getConnection(function (error,conn){
+                conn.query('UPDATE `order` SET OrderStatus = ? WHERE OrderId=?',[order_status,order_id],
+                function(err,rows,fields){
+                    if(err){
+                        res.status(500)
+                        res.send(JSON.stringify({ success: false, message:err.message }))
+                    }else{
+                        res.send(JSON.stringify({ success: true, message:"success" }))
+
+                    }
+                 })
+               
+                })
+            }else{
+                res.send(JSON.stringify({ success: false, message: " order id and orderStatus must be a number" }))
+
+            }
+          
+        }
+        else {
+            res.send(JSON.stringify({ success: false, message: "Missing order id and orderStatus in body" }))
+        }
+    }
+    else {
+        res.send(JSON.stringify({ success: false, message: "Wrong API Key" }))
+    }
+})
+
 
 //======================================
 //ORDERDetails TABLE
@@ -944,6 +1051,9 @@ console.log("parsing success")
         res.send(JSON.stringify({ success: false, message: "Wrong API Key" }))
     }
 })
+
+
+
 module.exports = router
 
 
